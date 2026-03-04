@@ -42,7 +42,8 @@ function numberWithSpaces(x) {
 // Fetch and process data
 
 //fetchDataAndProcess('https://mp505737ab307e812387.free.beeceptor.com/regions')
-fetchDataAndProcess('https://mnbvcxz.free.beeceptor.com/regions')
+//fetchDataAndProcess('https://mnbvcxz.free.beeceptor.com/regions')
+fetchDataAndProcess('https://qewetert.free.beeceptor.com/regions')
 
 .then(result => {
     console.log('Result:', Object.values(result));
