@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-
+/*
     function fetchDataAndProcess(url) {
         return fetch(url)
           .then(response => response.json())
@@ -30,8 +30,50 @@ document.addEventListener('DOMContentLoaded', function () {
           })
           .catch(error => console.error(`Error fetching data from ${url}:`, error));
       }
+*/
+    function fetchDataAndProcess(url) {
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
 
+            if (!Array.isArray(data)) {
+                console.error('Ожидался массив, но получено:', data);
+                return {};
+            }
 
+            return data.reduce((acc, obj) => {
+
+                const key = `${obj.region_cd.trim()}_${obj.code}`;
+
+                if (!acc[key]) {
+                    acc[key] = {
+                        region_cd: obj.region_cd.trim(),
+                        region_name: obj.region_name,
+                        coordinat_x: obj.coordinat_x,
+                        coordinat_y: obj.coordinat_y,
+                        code: obj.code,
+                        cpzl: 0,
+                        mpi: 0,
+                        mpi_cpzl: 0
+                    };
+                }
+
+                const cpzl = Number(obj.count_cpzl) || 0;
+                const mpi = Number(obj.count_mpi) || 0;
+
+                acc[key].cpzl += cpzl;
+                acc[key].mpi += mpi;
+
+                acc[key].mpi_cpzl = acc[key].cpzl
+                    ? (acc[key].mpi / acc[key].cpzl) * 100
+                    : 0;
+
+                return acc;
+
+            }, {});
+        })
+        .catch(error => console.error(`Ошибка загрузки ${url}:`, error));
+    }
 
 
 // Разделить числа в тексте пробелами по разрядам
@@ -43,7 +85,8 @@ function numberWithSpaces(x) {
 
 //fetchDataAndProcess('https://mp505737ab307e812387.free.beeceptor.com/regions')
 //fetchDataAndProcess('https://mnbvcxz.free.beeceptor.com/regions')
-fetchDataAndProcess('https://qewetert.free.beeceptor.com/regions')
+//fetchDataAndProcess('https://qewetert.free.beeceptor.com/regions')
+fetchDataAndProcess('https://viktorgo86.github.io/host_api/db_region.json')
 
 .then(result => {
     console.log('Result:', Object.values(result));
